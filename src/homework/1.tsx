@@ -1,9 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 
 // Опишіть Props
+type Props = {
+  children: React.ReactNode;
+  onContentEndVisible?:() => void;
+}
 export function Observer({ children, onContentEndVisible }: Props) {
   // Вкажіть правильний тип для useRef зверніть увагу, в який DOM елемент ми його передаємо
-  const endContentRef = useRef(null);
+  const endContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Вкажіть правильний тип для options, підказка, клас також можна вказувати як тип
@@ -15,7 +19,7 @@ export function Observer({ children, onContentEndVisible }: Props) {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.intersectionRatio > 0) {
+        if (entry.intersectionRatio > 0 && onContentEndVisible && typeof onContentEndVisible === 'function') {
           onContentEndVisible();
           observer.disconnect();
         }
